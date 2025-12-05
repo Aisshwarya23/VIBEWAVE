@@ -1,0 +1,112 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white overflow-x-hidden flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur-md border-b border-indigo-500/20 w-full max-w-7xl mx-auto sticky top-0 z-50">
+    <h1 class="text-3xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 transition duration-500 hover:scale-105 transform-gpu">
+      <span class="inline-block hover:rotate-12 transition-transform">🎵</span> VibeWave
+    </h1>
+    <ul class="flex space-x-6 text-lg">
+      <li><a routerLink="/home" class="relative group font-medium">
+          <span class="text-green-400 group-hover:text-green-300 transition-colors">* Home</span>
+        </a></li>
+      <li><a routerLink="/library" class="relative group font-medium">
+          <span class="text-blue-400 group-hover:text-blue-300 transition-colors">* Library</span>
+        </a></li>
+      <li><a routerLink="/playlist" class="relative group font-medium">
+          <span class="text-purple-400 group-hover:text-purple-300 transition-colors">* Playlists</span>
+        </a></li>
+      <li><a routerLink="/login" class="relative group font-medium">
+          <span class="text-pink-400 group-hover:text-pink-300 transition-colors">* Login</span>
+        </a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Music Player Card -->
+  <main class="flex-grow flex items-center justify-center p-6">
+    <div class="p-8 w-full max-w-md bg-gray-800/80 backdrop-blur-sm text-white rounded-2xl shadow-2xl space-y-6 border border-indigo-500/20 transform transition-all hover:scale-[1.02] duration-300">
+
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold truncate">🎶 {{ currentSong || 'No song selected' }}</h2>
+          <p class="text-gray-400 text-sm">🎤 {{ currentArtist || 'Unknown artist' }}</p>
+        </div>
+        <span class="text-xs bg-pink-500/20 text-pink-300 px-2 py-1 rounded-full">❤️ {{ likedSongs.length }} liked</span>
+      </div>
+      
+      <!-- Album Art -->
+      <div class="relative group">
+        <img [src]="albumCover" alt="Album Art" 
+             class="w-full aspect-square rounded-xl mx-auto shadow-lg group-hover:shadow-pink-500/30 transition-shadow duration-300">
+        <div class="absolute inset-0 rounded-xl bg-pink-500/0 group-hover:bg-pink-500/10 transition-all duration-500"></div>
+      </div>
+      
+      <!-- Progress Bar -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-xs text-gray-400">
+          <span>1:23</span>
+          <span>3:45</span>
+        </div>
+        <div class="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-pink-500 to-purple-500 w-1/3 rounded-full"></div>
+        </div>
+      </div>
+      
+      <!-- Volume Control -->
+      <div class="space-y-2">
+        <label for="volume" class="flex justify-between text-sm">
+          <span>🔊 Volume</span>
+          <span class="text-gray-400">{{ volume }}%</span>
+        </label>
+        <input type="range" id="volume" [(ngModel)]="volume" min="0" max="100" 
+               class="w-full h-1.5 bg-gray-700 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-pink-500 [&::-webkit-slider-thumb]:to-purple-500">
+      </div>
+
+      <!-- Search Songs -->
+      <input type="text" [(ngModel)]="searchQuery" placeholder="🔍 Search songs..."
+        class="w-full mx-auto px-3 py-1.5 text-sm rounded-full bg-gray-700/50 border border-gray-600/40 
+               focus:outline-none focus:ring-2 focus:ring-pink-500/40 focus:border-transparent 
+               transition-all duration-200 placeholder:text-gray-400" />
+
+      <!-- Control Buttons -->
+      <div class="flex justify-between gap-3 mt-4">
+        <button (click)="likeSong(currentSong)" 
+                class="flex-1 bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/30 text-pink-300 px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 hover:scale-[1.03]">
+          <span class="text-lg">❤️</span> Like
+        </button>
+
+        <button (click)="playSong()" [disabled]="!isSongSelected" 
+                class="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:scale-[1.03] disabled:opacity-50 disabled:pointer-events-none">
+          <span class="text-lg">▶️</span> Play
+        </button>
+
+        <button (click)="pauseSong()" [disabled]="!isSongSelected" 
+                class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:scale-[1.03] disabled:opacity-50 disabled:pointer-events-none">
+          <span class="text-lg">⏸️</span> Pause
+        </button>
+
+        <button (click)="removeFromPlaylist(currentSong)" 
+                class="flex-1 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 hover:scale-[1.03]">
+          <span class="text-lg">🗑️</span> Remove
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 text-sm py-6 bg-black/80 backdrop-blur-md border-t border-indigo-500/20 w-full">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-pink-500 font-bold">© 2025 VibeWave</span> | All rights reserved
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="hover:text-green-400 transition duration-300 hover:underline underline-offset-4">Terms</a>
+          <a href="#" class="hover:text-blue-400 transition duration-300 hover:underline underline-offset-4">Privacy</a>
+          <a href="#" class="hover:text-purple-400 transition duration-300 hover:underline underline-offset-4">Cookies</a>
+          <a href="#" class="hover:text-pink-400 transition duration-300 hover:underline underline-offset-4">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>

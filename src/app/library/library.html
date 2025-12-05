@@ -1,0 +1,89 @@
+<!-- Navbar -->
+<nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur-md border-b border-indigo-500/20 w-full max-w-7xl mx-auto sticky top-0 z-50">
+  <h1 class="text-3xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 transition duration-500 hover:scale-105 transform-gpu">
+    <span class="inline-block hover:rotate-12 transition-transform">🎵</span> VibeWave
+  </h1>
+  <ul class="flex space-x-6 text-lg">
+    <li><a routerLink="/home" class="relative group font-medium">
+        <span class="text-green-400 group-hover:text-green-300 transition-colors"> * Home </span>
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-green-400 group-hover:w-full transition-all duration-300 ease-out"></span>
+      </a></li>
+    <li><a routerLink="/library" class="relative group font-medium">
+        <span class="text-blue-400 group-hover:text-blue-300 transition-colors"> * Library </span>
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300 ease-out"></span>
+      </a></li>
+    <li><a routerLink="/playlist" class="relative group font-medium">
+        <span class="text-purple-400 group-hover:text-purple-300 transition-colors"> * Playlists </span>
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300 ease-out"></span>
+      </a></li>
+    <li><a routerLink="/login" class="relative group font-medium">
+        <span class="text-pink-400 group-hover:text-pink-300 transition-colors"> * Login </span>
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-400 group-hover:w-full transition-all duration-300 ease-out"></span>
+      </a></li>
+  </ul>
+</nav>
+  <!-- Library Page -->
+<div *ngIf="!isLyricsPage" class="container mx-auto px-6 py-8">
+  <h1 class="text-4xl font-bold mb-8 text-white">Your Library</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="card bg-gray-800 rounded-xl shadow-lg p-4" *ngFor="let album of albums">
+      <div class="album-art mb-4">
+        <img [src]="album.cover" alt="{{ album.title }}" class="w-full h-48 object-cover rounded-lg">
+      </div>
+      <h2 class="text-xl font-semibold text-white">{{ album.title }}</h2>
+      <p class="text-gray-400 mb-4">{{ album.author }}</p>
+      <div class="flex space-x-2">
+        <button class="flex-1 bg-pink-500 hover:bg-pink-400 text-white py-2 rounded-lg transition" 
+                (click)="showLyrics(album)">
+          Lyrics
+        </button>
+        <button class="flex-1 bg-indigo-500 hover:bg-indigo-400 text-white py-2 rounded-lg transition">
+          More
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lyrics Page -->
+<ng-template [ngIf]="isLyricsPage">
+  <div class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-50 overflow-hidden">
+    
+    <!-- Floating Music Notes -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <span class="music-note">🎵</span>
+      <span class="music-note delay-1">🎶</span>
+      <span class="music-note delay-2">🎵</span>
+      <span class="music-note delay-3">🎶</span>
+    </div>
+
+    <!-- Lyrics Card -->
+    <div class="relative lyrics-card rounded-2xl shadow-2xl max-w-lg w-full p-8">
+      <!-- Close Button -->
+      <button (click)="goBack()" 
+        class="absolute top-4 right-4 text-white bg-black/30 hover:bg-black/50 px-3 py-1 rounded-full text-sm z-10">
+        ✖
+      </button>
+
+      <!-- Centered Album Cover + Title + Author -->
+      <div class="flex flex-col items-center mb-6 text-center">
+        <img [src]="selectedAlbum?.cover" alt="{{ selectedAlbum?.title }}" 
+             class="album-cover mb-3">
+        <h1 class="title-gradient text-3xl font-extrabold drop-shadow-lg">
+          {{ selectedAlbum?.title }}
+        </h1>
+        <p class="author-gradient text-lg font-medium italic">
+          {{ selectedAlbum?.author }}
+        </p>
+      </div>
+
+      <!-- Lyrics -->
+      <div class="lyrics-box overflow-y-auto max-h-96 text-center">
+        <pre class="whitespace-pre-wrap font-medium leading-relaxed">
+{{ selectedAlbum?.lyrics }}
+        </pre>
+      </div>
+    </div>
+  </div>
+</ng-template>

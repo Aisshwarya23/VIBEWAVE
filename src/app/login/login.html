@@ -1,0 +1,71 @@
+<div class="login-page">
+  <!-- Navbar -->
+  <nav class="login-navbar">
+    <div class="nav-brand">
+      <svg class="nav-icon" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+      </svg>
+      <span>VibeWave</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/home">Home</a>
+      <a routerLink="/library">Library</a>
+      <a routerLink="/playlist">Playlist</a>
+      <a routerLink="/login" class="active">Login</a>
+    </div>
+  </nav>
+
+  <!-- Login Container -->
+  <div class="compact-login-wrapper">
+    <div class="compact-login-container">
+      <div class="login-header">
+        <h2>Welcome Back</h2>
+        <p>Sign in to continue</p>
+      </div>
+
+      <!-- Login Form -->
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
+
+        <!-- Email Input -->
+        <div class="form-group">
+          <input 
+            type="email" 
+            name="email" 
+            [(ngModel)]="credentials.email" 
+            required 
+            email
+            placeholder="Email"
+            class="form-input"
+          >
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="credentials.password"
+            required
+            placeholder="Password"
+            class="form-input"
+          >
+        </div>
+
+        <!-- Sign In Button with Ripple -->
+        <button 
+          type="submit" 
+          class="login-button" 
+          [disabled]="!loginForm.valid"
+          (click)="createRipple($event)">
+          SIGN IN
+        </button>
+
+        <!-- Sign up Link -->
+        <div class="login-footer">
+          <span>Don't have an account?</span>
+          <a routerLink="/signup">Sign up</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
